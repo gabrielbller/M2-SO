@@ -1,8 +1,13 @@
-#define MIN_PRIORITY 1
-#define MAX_PRIORITY 10
+#ifndef SCHEDULE_RR_P_H
+#define SCHEDULE_RR_P_H
 
-// add a task to the list 
-void add(char *name, int priority, int burst);
+#include "list.h"
+#include "task.h"
 
-// invoke the scheduler
-void schedule();
+// funcao para adicionar uma tarefa � lista de tarefas
+void add_rr_p(char *name, int priority, int burst);
+
+// funcao para executar o escalonamento das tarefas
+void schedule_rr_p();
+
+#endif / SCHEDULE_RR_P_H * /

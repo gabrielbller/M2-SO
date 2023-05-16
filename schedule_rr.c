@@ -1,71 +1,54 @@
-#include <stdlib.h>
-#include <stdio.h>
+// inclui os arquivos header necess�rios
+#include "schedule_rr.h"
 #include "list.h"
 #include "task.h"
-#include "schedule_rr.h"
+#include "CPU.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-// length of a time quantum
-#define QUANTUM 10
-
-// the list of tasks
+// declara��o da lista de tarefas
 struct node *task_list = NULL;
 
-// add a new task to the list of tasks
-void add(char *name, int priority, int burst)
+// adiciona uma tarefa � lista
+void add_rr(char *name, int priority, int burst)
 {
+    // aloca espa�o na mem�ria para a nova tarefa
     Task *newTask = malloc(sizeof(Task));
     newTask->name = name;
-    newTask->tid = rand() % 1000;
     newTask->priority = priority;
     newTask->burst = burst;
-
+    // adiciona a nova tarefa � lista
     insert(&task_list, newTask);
 }
 
-// invoke the scheduler
-void schedule()
+// invoca o escalonador
+void schedule_rr()
 {
-    int time = 0;
+    // percorre a lista de tarefas e executa cada uma delas por um tempo limitado (quantum)
     struct node *current_task = task_list;
-
-    while (task_list != NULL)
+    while (current_task != NULL)
     {
-        if (current_task == NULL)
+        // mant�m o controle do tempo restante para a tarefa atual
+        int remaining_burst = current_task->task->burst;
+        // executa a tarefa em segmentos de tamanho igual ao quantum
+        while (remaining_burst > 0)
         {
-            current_task = task_list;
+            if (remaining_burst > QUANTUM)
+            {
+                // se o tempo restante for maior que o quantum, executa o quantum da tarefa
+                run(current_task->task, QUANTUM);
+                // subtrai o tempo do quantum do tempo restante da tarefa
+                remaining_burst -= QUANTUM;
+            }
+            else
+            {
+                // se o tempo restante for menor ou igual ao quantum, executa o tempo restante da tarefa
+                run(current_task->task, remaining_burst);
+                // define o tempo restante como zero para sair do loop interno
+                remaining_burst = 0;
+            }
         }
-        else
-        {
-            current_task = current_task->next;
-        }
-
-        if (current_task->task->burst > QUANTUM)
-        {
-            // run the task for a time slice of the quantum length
-            run(current_task->task, QUANTUM);
-            current_task->task->burst -= QUANTUM;
-            time += QUANTUM;
-
-            // move the task to the end of the list
-            delete (&task_list, current_task->task);
-            insert(&task_list, current_task->task);
-        }
-        else
-        {
-            // run the task for its entire remaining burst time
-            run(current_task->task, current_task->task->burst);
-            time += current_task->task->burst;
-
-            // remove the task from the list
-            delete (&task_list, current_task->task);
-        }
+        // passa para a pr�xima tarefa na lista
+        current_task = current_task->next;
     }
-
-    printf("All tasks completed. Total time: %d\n", time);
-}
-
-// run the specified task for the following time slice
-void run(Task *task, int slice)
-{
-    printf("Running task = [%s] [%d] [%d] for %d units.\n", task->name, task->priority, task->burst, slice);
 }

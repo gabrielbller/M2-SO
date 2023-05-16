@@ -1,8 +1,13 @@
-#define MIN_PRIORITY 1
-#define MAX_PRIORITY 10
+#ifndef SCHEDULE_FCFS_H
+#define SCHEDULE_FCFS_H
 
-// add a task to the list 
-void add(char *name, int priority, int burst);
+#include "list.h"
+#include "task.h"
 
-// invoke the scheduler
-void schedule();
+// function to add a task to the task list
+void add_fcfs(char *name, int priority, int burst);
+
+// function to execute the task scheduling
+void schedule_fcfs();
+
+#endif /* SCHEDULE_FCFS_H */

@@ -1,59 +1,34 @@
+// inclui os arquivos header necess�rios
+#include "schedule_fcfs.h"
+#include "list.h"
+#include "task.h"
+#include "CPU.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "CPU.h"
-#include "task.h"
-#include "list.h"
-#include "schedule_fcfs.h"
-#include "driver.c"
 
-// global variable for keeping track of system time
-int system_time = 0;
+// declara��o da lista de tarefas
+struct node *task_list = NULL;
 
-// function to schedule tasks using the FCFS algorithm
-void schedule() {
-    struct node *head = NULL;
-    Task *current_task = NULL;
+// adiciona uma tarefa � lista
+void add_fcfs(char *name, int priority, int burst)
+{
+    // aloca espa�o na mem�ria para a nova tarefa
+    Task *newTask = malloc(sizeof(Task));
+    newTask->name = name;
+    newTask->priority = priority;
+    newTask->burst = burst;
+    // adiciona a nova tarefa � lista
+    insert(&task_list, newTask);
+}
 
-    // create a list of tasks from the input file
-    // in the format "[name], [priority], [burst]"
-    FILE *in;
-    char *temp;
-    char task[SIZE];
-
-    char *name;
-    int priority;
-    int burst;
-
-    in = fopen("rr-schedule.txt", "r");
-    if (in == NULL) {
-        perror("Error opening file");
-        exit(EXIT_FAILURE);
-    }
-
-    while (fgets(task, SIZE, in) != NULL) {
-        temp = strdup(task);
-        name = strsep(&temp, ",");
-        priority = atoi(strsep(&temp, ","));
-        burst = atoi(strsep(&temp, ","));
-
-        // add the task to the scheduler's list of tasks
-        insert(&head, current_task);
-
-        free(temp);
-    }
-
-    fclose(in);
-
-    // loop until all tasks are completed
-    while (head != NULL) {
-        // get the first task in the list
-        current_task = head->task;
-
-        // run the current task until it is complete
-        run(current_task, current_task->burst);
-
-        // update the system time and remove the completed task from the list
-        system_time += current_task->burst;
-        delete(&head, current_task);
+// invoca o escalonador
+void schedule_fcfs()
+{
+    // percorre a lista de tarefas e executa cada uma delas
+    struct node *current_task = task_list;
+    while (current_task != NULL)
+    {
+        run(current_task->task, current_task->task->burst);
+        current_task = current_task->next;
     }
 }

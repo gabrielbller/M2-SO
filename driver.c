@@ -1,21 +1,29 @@
-/**
- * Driver.c
- *
- * Schedule is in the format
- *
- *  [name] [priority] [CPU burst]
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "task.h"
 #include "list.h"
-
+#include "schedule_fcfs.h"
+#include "schedule_rr.h"
+#include "schedule_rr_p.h"
 #define SIZE 100
+
+char *strsep(char **stringp, const char *delim) {
+    char *rv = *stringp;
+    if (rv) {
+        *stringp += strcspn(*stringp, delim);
+        if (**stringp)
+            *(*stringp)++ = '\0';
+        else
+            *stringp = 0; }
+    return rv;
+}
+
 
 int main(int argc, char *argv[])
 {
+    int time_slice = 10;
+
     FILE *in;
     char *temp;
     char task[SIZE];
@@ -24,17 +32,16 @@ int main(int argc, char *argv[])
     int priority;
     int burst;
 
-    in = fopen(argv[1], "r");
+    in = fopen("rr-schedule.txt","r");
 
-    while (fgets(task, SIZE, in) != NULL)
-    {
+    while (fgets(task,SIZE,in) != NULL) {
         temp = strdup(task);
-        name = strsep(&temp, ",");
-        priority = atoi(strsep(&temp, ","));
-        burst = atoi(strsep(&temp, ","));
+        name = strsep(&temp,",");
+        priority = atoi(strsep(&temp,","));
+        burst = atoi(strsep(&temp,","));
 
         // add the task to the scheduler's list of tasks
-        add(name, priority, burst);
+        add_rr_p(name, priority, burst);
 
         free(temp);
     }
@@ -42,7 +49,7 @@ int main(int argc, char *argv[])
     fclose(in);
 
     // invoke the scheduler
-    schedule();
+    schedule_rr_p();
 
     return 0;
 }
