@@ -1,4 +1,4 @@
-// inclui os arquivos header necess�rios
+/*// inclui os arquivos header necess�rios
 #include "schedule_rr.h"
 #include "list.h"
 #include "task.h"
@@ -52,3 +52,5 @@ void schedule_rr()
         current_task = current_task->next;
     }
 }
+
+*/

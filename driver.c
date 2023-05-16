@@ -22,7 +22,6 @@ char *strsep(char **stringp, const char *delim) {
 
 int main(int argc, char *argv[])
 {
-    int time_slice = 10;
 
     FILE *in;
     char *temp;
@@ -41,7 +40,7 @@ int main(int argc, char *argv[])
         burst = atoi(strsep(&temp,","));
 
         // add the task to the scheduler's list of tasks
-        add_rr_p(name, priority, burst);
+        add_fcfs(name, priority, burst);
 
         free(temp);
     }
@@ -49,7 +48,7 @@ int main(int argc, char *argv[])
     fclose(in);
 
     // invoke the scheduler
-    schedule_rr_p();
+    schedule_fcfs();
 
     return 0;
 }
