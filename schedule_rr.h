@@ -8,6 +8,6 @@
 void add_RR(char *name, int priority, int burst);
 
 // funcao para executar o escalonamento das tarefas
-void schedule();
+void schedule_RR();
 
-#endif / SCHEDULE_RR_H * /
+#endif

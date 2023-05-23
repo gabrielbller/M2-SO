@@ -1,10 +1,9 @@
-//Nome do arquivo list.c
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "list.h"
 #include "task.h"
+
 
 // add a new task to the list of tasks
 void insert(struct node **head, Task *newTask) {
@@ -48,4 +47,19 @@ void traverse(struct node *head) {
         printf("[%s] [%d] [%d]\n",temp->task->name, temp->task->priority, temp->task->burst);
         temp = temp->next;
     }
+}
+
+// Clear the list of tasks
+void clear_list(struct node **head) {
+    struct node *current = *head;
+    struct node *next;
+
+    while (current != NULL) {
+        next = current->next;
+        free(current->task);
+        free(current);
+        current = next;
+    }
+
+    *head = NULL;
 }

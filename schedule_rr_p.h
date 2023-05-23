@@ -12,4 +12,4 @@ struct node *partition(struct node *low, struct node *high);
 // funcao para executar o escalonamento das tarefas
 void schedule_RR_P();
 
-#endif / SCHEDULE_RR_P_H * /
+#endif

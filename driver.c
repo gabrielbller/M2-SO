@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include "task.h"
 #include "list.h"
 #include "schedule_fcfs.h"
@@ -71,7 +70,7 @@ int main(int argc, char *argv[])
         }
         else if (option == 2)
         {
-            add_RR_P(name, priority, burst);
+            add_RR(name, priority, burst);
         }
         else
         {
@@ -96,6 +95,7 @@ int main(int argc, char *argv[])
     {
         schedule_RR_P();
     }
+
 
     return 0;
 }

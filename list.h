@@ -5,9 +5,12 @@
 struct node {
     Task *task;
     struct node *next;
+    struct node *prev;
 };
 
-void insert_task(struct node **head, Task *task);
-void delete_task(struct node **head, Task *task);
-void traverse_task(struct node *head);
+// Function prototype for clear_list
+void clear_list(struct node **head);
+void insert(struct node **head, Task *task);
+void delete(struct node **head, Task *task);
+void traverse(struct node *head);
 #endif
